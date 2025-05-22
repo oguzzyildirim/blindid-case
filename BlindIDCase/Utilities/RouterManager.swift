@@ -47,16 +47,16 @@ final class RouterManager: RouterProtocol {
             switch route.rotingType {
                 
             case .push:
-                LogHelper.log("Pushed: \(route)")
+                LogManager.shared.info("Pushed: \(route)")
                 self.navigationController.pushViewController(viewController, animated: animated)
                 
             case .presentModally:
-                LogHelper.log("Presented Modally: \(route)")
+                LogManager.shared.info("Presented Modally: \(route)")
                 viewController.modalPresentationStyle = .formSheet
                 self.navigationController.present(viewController, animated: animated)
                 
             case .presentFullScreen:
-                LogHelper.log("Presented Full Screen: \(route)")
+                LogManager.shared.info("Presented Full Screen: \(route)")
                 viewController.modalPresentationStyle = .fullScreen
                 self.navigationController.present(viewController, animated: animated)
             }
@@ -76,13 +76,13 @@ final class RouterManager: RouterProtocol {
             switch route.rotingType {
                 
             case .push, .presentModally:
-                LogHelper.log("Presented Modally: \(route)")
+                LogManager.shared.info("Presented Modally: \(route)")
                 viewController.modalPresentationStyle = .formSheet
                 viewController.modalTransitionStyle = transition
                 self.navigationController.present(viewController, animated: animated)
                 
             case .presentFullScreen:
-                LogHelper.log("Presented Full Screen: \(route)")
+                LogManager.shared.info("Presented Full Screen: \(route)")
                 viewController.modalPresentationStyle = .overFullScreen
                 viewController.modalTransitionStyle = transition
                 self.navigationController.present(viewController, animated: animated)

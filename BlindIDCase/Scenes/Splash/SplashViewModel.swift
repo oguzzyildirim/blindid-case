@@ -15,7 +15,7 @@ final class SplashViewModel: ObservableObject {
     }
     
     func onDisappear() {
-        LogHelper.log()
+        LogManager.shared.info("SplashViewModel onDisappear")
     }
     
     func showTabBarView() {
