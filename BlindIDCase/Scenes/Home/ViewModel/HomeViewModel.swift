@@ -6,7 +6,36 @@
 //
 
 import Foundation
+import Combine
 
 final class HomeViewModel: ObservableObject {
+    @Published var movies: [Movie] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String?
     
+    private let movieService: MovieServiceProtocol
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(movieService: MovieServiceProtocol = MovieService()) {
+        self.movieService = movieService
+        fetchMovies()
+    }
+    
+    func fetchMovies() {
+        isLoading = true
+        errorMessage = nil
+        
+        movieService.fetchMovies()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                self?.isLoading = false
+                
+                if case .failure(let error) = completion {
+                    self?.errorMessage = error.localizedDescription
+                }
+            } receiveValue: { [weak self] movies in
+                self?.movies = movies
+            }
+            .store(in: &cancellables)
+    }
 }
