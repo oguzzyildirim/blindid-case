@@ -48,6 +48,21 @@ enum Strings {
         case sentToEmail
         case sendAgain
         
+        // ProfileView
+        case profile
+        case logout
+        case settings
+        case accountSettings
+        case privacySettings
+        case error
+        case tryAgain
+        case loading
+        
+        // UserInfo
+        case favorites
+        case reviews
+        case following
+        
         var value: String {
             switch self {
             case .header:
@@ -110,6 +125,32 @@ enum Strings {
                 return "adresinize gönderilmiştir."
             case .sendAgain:
                 return "Tekrar Gönder"
+                
+            // ProfileView
+            case .profile:
+                return "Profil"
+            case .logout:
+                return "Çıkış Yap"
+            case .settings:
+                return "Ayarlar"
+            case .accountSettings:
+                return "Hesap Ayarları"
+            case .privacySettings:
+                return "Gizlilik Ayarları"
+            case .error:
+                return "Hata!"
+            case .tryAgain:
+                return "Tekrar Dene"
+            case .loading:
+                return "Yükleniyor..."
+                
+            // UserInfo
+            case .favorites:
+                return "Favoriler"
+            case .reviews:
+                return "Yorumlar"
+            case .following:
+                return "Takip Edilen"
             }
         }
     }
