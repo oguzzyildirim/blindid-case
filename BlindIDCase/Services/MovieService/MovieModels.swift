@@ -1,3 +1,10 @@
+//
+//  MovieModels.swift
+//  BlindIDCase
+//
+//  Created by Oguz Yildirim on 23.05.2025.
+//
+
 import Foundation
 
 struct Movie: Identifiable, Decodable {
