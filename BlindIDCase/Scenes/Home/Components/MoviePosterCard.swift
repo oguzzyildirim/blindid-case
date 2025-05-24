@@ -1,0 +1,72 @@
+//
+//  MoviePosterCard.swift
+//  BlindIDCase
+//
+//  Created by Oguz Yildirim on 23.05.2025.
+//
+
+import SwiftUI
+import SDWebImageSwiftUI
+
+struct MoviePosterCard: View {
+    @EnvironmentObject var router: RouterManager
+    let movie: Movie
+    let rank: Int?
+    
+    @State private var imageLoaded = false
+    @State private var cacheType: SDImageCacheType = .none
+
+    init(movie: Movie, rank: Int? = nil) {
+        self.movie = movie
+        self.rank = rank
+    }
+
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            if imageLoaded {
+                WebImage(url: URL(string: movie.posterURL)) { image in
+                        image.resizable()
+                    } placeholder: {
+                        Rectangle()
+                            .foregroundColor(.gray.opacity(0.3))
+                            .frame(width: 140, height: 210)
+                            .cornerRadius(16)
+                    }
+                    .onSuccess { _, _, type in
+                        cacheType = type
+                        if type == .none {
+                            withAnimation(.easeIn(duration: 0.4)) {
+                                imageLoaded = true
+                            }
+                        } else {
+                            imageLoaded = true
+                        }
+                    }
+                    .indicator(.activity)
+                    .transition(.opacity)
+                    .scaledToFit()
+                    .frame(width: 140, height: 210)
+                    .cornerRadius(16)
+            } else {
+                Rectangle()
+                    .foregroundColor(.gray.opacity(0.3))
+                    .frame(width: 140, height: 210)
+                    .cornerRadius(16)
+            }
+
+            Text("\(movie.id)")
+                .font(.robotoMedium(size: 70))
+                .foregroundColor(.appMain)
+                .shadow(color: .blue.opacity(1), radius: 1, x: 1, y: 1)
+                .padding(.bottom, -20)
+                .padding(.leading, -18)
+        }
+        .frame(width: 140, height: 210)
+        .onAppear {
+            imageLoaded = true
+        }
+        .onTapGesture {
+            router.show(.movieDetail(movieId: movie.id), animated: true)
+        }
+    }
+}
