@@ -10,8 +10,34 @@ import Foundation
 /// If necessary, Swiftlint should be used here
 
 typealias LoginViewStrings = Strings.LoginStrings
+typealias FavoritesTabStrings = Strings.FavoritesStrings
 
 enum Strings {
+    enum FavoritesStrings {
+        case loginRequired
+        case loginRequiredDescription
+        case loginRequiredButtonText
+        case noFavorites
+        case noFavoritesDescription
+        case discoverMovie
+        
+        var value: String {
+            switch self {
+            case .loginRequired:
+                return "Giriş yapmanız gerekmektedir"
+            case .loginRequiredDescription:
+                return "Favori filmleri görüntülemek için lütfen giriş yapın"
+            case .loginRequiredButtonText:
+                return "Giriş Yap"
+            case .noFavorites:
+                return "Henüz hiç favori filmingiz yok"
+            case .noFavoritesDescription:
+                return "Favorilenmiş filmler burada görüntülenecektir"
+            case .discoverMovie:
+                return "Filmleri Keşfet"
+            }
+        }
+    }
     enum LoginStrings {
         case header
         case subText
