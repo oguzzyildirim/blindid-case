@@ -27,7 +27,7 @@ struct CurrentUser: Decodable, Identifiable {
     let name: String
     let surname: String
     let email: String
-    let likedMovies: [String]
+    let likedMovies: [Int]
     let createdAt: String
     let updatedAt: String
     let version: Int

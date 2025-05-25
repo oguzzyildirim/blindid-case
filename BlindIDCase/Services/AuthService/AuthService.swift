@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 // MARK: - Auth Service
 
@@ -17,7 +18,7 @@ protocol AuthServiceProtocol {
     func saveToken(_ token: String)
     func getToken() -> String?
     func clearToken()
-    func isLoggedIn() -> Bool
+    func isUserLoggedIn() -> Bool
     func getCurrentLoginState() -> AnyPublisher<LoginState, Never>
     func fetchCurrentUser()
 }
@@ -28,12 +29,20 @@ final class AuthService: AuthServiceProtocol {
     private let loginStateSubject = CurrentValueSubject<LoginState, Never>(.loggedOut)
     private var cancellables = Set<AnyCancellable>()
     
+    @AppStorage(StaticKeys.loginStatus.key) private var isLoggedIn: Bool = false
+    
     init(httpClient: HTTPClient = URLSession.shared) {
         self.httpClient = httpClient
         if let _ = getToken() {
             loginStateSubject.send(.loading)
             fetchCurrentUser()
         }
+        
+        loginStateSubject
+            .sink { [weak self] state in
+                self?.isLoggedIn = state.isLoggedIn
+            }
+            .store(in: &cancellables)
     }
     
     func register(name: String, surname: String, email: String, password: String) -> AnyPublisher<AuthResponse, Error> {
@@ -45,7 +54,7 @@ final class AuthService: AuthServiceProtocol {
             .tryMap { data, response in
                 guard 200..<300 ~= response.statusCode else {
                     let errorMessage = "Registration failed with code: \(response.statusCode)"
-                    self.clearToken() // Herhangi bir token varsa temizle
+                    self.clearToken()
                     self.loginStateSubject.send(.error(errorMessage))
                     throw NSError(domain: "AuthService", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: errorMessage])
                 }
@@ -58,7 +67,7 @@ final class AuthService: AuthServiceProtocol {
                 self.fetchCurrentUser()
             }, receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
-                    self?.clearToken() // Hata durumunda token'ı temizle
+                    self?.clearToken()
                     self?.loginStateSubject.send(.error(error.localizedDescription))
                 }
             })
@@ -154,7 +163,7 @@ final class AuthService: AuthServiceProtocol {
         loginStateSubject.send(.loggedOut)
     }
     
-    func isLoggedIn() -> Bool {
+    func isUserLoggedIn() -> Bool {
         return getToken() != nil
     }
     

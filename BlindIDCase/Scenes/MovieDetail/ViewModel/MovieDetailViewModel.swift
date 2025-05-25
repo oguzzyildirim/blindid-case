@@ -7,14 +7,16 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 final class MovieDetailViewModel: ObservableObject {
     @Published var movie: Movie?
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var isFavorite = false
-    @Published var loginState: LoginState = .loggedOut
     @Published var showLoginAlert = false
+    
+    @AppStorage(StaticKeys.loginStatus.key) var isLoggedIn: Bool = false
     
     private let movieId: Int
     private let movieService: MovieServiceProtocol
@@ -31,19 +33,21 @@ final class MovieDetailViewModel: ObservableObject {
         self.favoriteService = favoriteService
         self.authService = authService
         
-        // Subscribe to login state changes - simple subscription
-        authService.getCurrentLoginState()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] state in
-                self?.loginState = state
-                if case .loggedIn = state {
-                    self?.checkFavoriteStatus()
-                }
-            }
-            .store(in: &cancellables)
+        setupLoginStateObserver()
         
         checkFavoriteStatus()
         fetchMovieDetail()
+    }
+    
+    private func setupLoginStateObserver() {
+        authService.getCurrentLoginState()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                guard let self = self else { return }
+                self.isLoggedIn = state.isLoggedIn
+                self.checkFavoriteStatus()
+            }
+            .store(in: &cancellables)
     }
     
     func fetchMovieDetail() {
@@ -60,6 +64,7 @@ final class MovieDetailViewModel: ObservableObject {
                 }
             } receiveValue: { [weak self] movie in
                 self?.movie = movie
+                self?.checkFavoriteStatus()
             }
             .store(in: &cancellables)
     }
@@ -67,22 +72,37 @@ final class MovieDetailViewModel: ObservableObject {
     func toggleFavorite() {
         guard let movie = movie else { return }
         
-        // Check if user is logged in
-        if !loginState.isLoggedIn {
-            // Show login alert instead of toggling favorite
+        guard isLoggedIn else {
             showLoginAlert = true
             return
         }
         
-        isFavorite = favoriteService.toggleFavorite(movieId: movie.id)
+        if isFavorite {
+            favoriteService.unlikeMovie(movieId: movie.id)
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    if case .failure(let error) = completion {
+                        print("Error unliking movie: \(error.localizedDescription)")
+                    }
+                } receiveValue: { [weak self] _ in
+                    self?.isFavorite = false
+                }
+                .store(in: &cancellables)
+        } else {
+            favoriteService.likeMovie(movieId: movie.id)
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    if case .failure(let error) = completion {
+                        print("Error liking movie: \(error.localizedDescription)")
+                    }
+                } receiveValue: { [weak self] _ in
+                    self?.isFavorite = true
+                }
+                .store(in: &cancellables)
+        }
     }
     
     private func checkFavoriteStatus() {
-        // Only check favorites if logged in
-        if loginState.isLoggedIn {
-            isFavorite = favoriteService.isFavorite(movieId: movieId)
-        } else {
-            isFavorite = false
-        }
+        isFavorite = favoriteService.isMovieLiked(movieId: movieId)
     }
 } 
