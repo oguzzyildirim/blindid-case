@@ -28,9 +28,9 @@ extension FavoriteEndpoint: ApiEndpoint {
     var path: String {
         switch self {
         case .likeMovie(let movieId):
-            return "/api/movies/like/\(movieId)"
+            return "api/movies/like/\(movieId)"
         case .unlikeMovie(let movieId):
-            return "/api/movies/unlike/\(movieId)"
+            return "api/movies/unlike/\(movieId)"
         }
     }
     
