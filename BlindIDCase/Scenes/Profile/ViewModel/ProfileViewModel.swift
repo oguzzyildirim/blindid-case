@@ -101,6 +101,34 @@ final class ProfileViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    func update() {
+        guard isRegisterFormValid else { return }
+        
+        isLoading = true
+        errorMessage = nil
+        
+        authService.update(name: firstName, surname: lastName, email: email, password: password)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                self?.isLoading = false
+                
+                if case .failure(let error) = completion {
+                    self?.errorMessage = error.localizedDescription
+                }
+            } receiveValue: { [weak self] response in
+                self?.setupSubscriptions()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self?.router?.pop(animated: true)
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func getUserInfo() {
+        authService.fetchCurrentUser()
+    }
+    
     func logout() {
         authService.clearToken()
     }

@@ -46,8 +46,13 @@ struct RegisterView: View {
                     loginPrompt
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 40)
+                .padding(.top, 80)
             }
+            BaseNavigationBar(navigationTitle: "Register")
+                .environmentObject(router)
+//            CustomNavigationBar.standard(title: "Register")
+//                .environmentObject(router)
+                
         }
         .navigationBarHidden(true)
         .onAppear {

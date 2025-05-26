@@ -9,6 +9,7 @@ import Foundation
 
 enum AuthEndpoint {
     case register(name: String, surname: String, email: String, password: String)
+    case update(name: String, surname: String, email: String, password: String)
     case login(email: String, password: String)
     case me
 }
@@ -30,6 +31,8 @@ extension AuthEndpoint: ApiEndpoint {
         switch self {
         case .register:
             return "api/auth/register"
+        case .update:
+            return "api/users/profile"
         case .login:
             return "api/auth/login"
         case .me:
@@ -41,12 +44,12 @@ extension AuthEndpoint: ApiEndpoint {
         var headers = ["Content-Type": "application/json"]
         
         switch self {
-        case .me:
+        case .me, .update:
             if let token = UserDefaults.standard.string(forKey: "authToken") {
                 headers["Authorization"] = "Bearer \(token)"
-                print("AuthEndpoint: Adding Authorization header with token: \(token.prefix(10))...")
+                LogManager.shared.info("AuthEndpoint: Adding Authorization header with token: \(token.prefix(10))...")
             } else {
-                print("AuthEndpoint: No token found for Authorization header")
+                LogManager.shared.warning("AuthEndpoint: No token found for Authorization header")
             }
         default:
             break
@@ -68,7 +71,17 @@ extension AuthEndpoint: ApiEndpoint {
                 "email": email,
                 "password": password
             ]
-            print("AuthEndpoint: Register params: \(name), \(surname), \(email), [password]")
+            LogManager.shared.info("AuthEndpoint: Update params: \(name), \(surname), \(email), [password]")
+            return params
+            
+        case .update(let name, let surname, let email, let password):
+            let params = [
+                "name": name,
+                "surname": surname,
+                "email": email,
+                "password": password
+            ]
+            LogManager.shared.info("AuthEndpoint: Register params: \(name), \(surname), \(email), [password]")
             return params
             
         case .login(let email, let password):
@@ -76,7 +89,7 @@ extension AuthEndpoint: ApiEndpoint {
                 "email": email,
                 "password": password
             ]
-            print("AuthEndpoint: Login params: \(email), [password]")
+            LogManager.shared.info("AuthEndpoint: Login params: \(email), [password]")
             return params
             
         case .me:
@@ -88,6 +101,8 @@ extension AuthEndpoint: ApiEndpoint {
         switch self {
         case .register, .login:
             return .POST
+        case .update:
+            return .PUT
         case .me:
             return .GET
         }

@@ -13,6 +13,7 @@ import SwiftUI
 
 protocol AuthServiceProtocol {
     func register(name: String, surname: String, email: String, password: String) -> AnyPublisher<AuthResponse, Error>
+    func update(name: String, surname: String, email: String, password: String) -> AnyPublisher<ProfileUpdateResponse, Error>
     func login(email: String, password: String) -> AnyPublisher<AuthResponse, Error>
     func getUserInfo() -> AnyPublisher<CurrentUser, Error>
     func saveToken(_ token: String)
@@ -62,8 +63,8 @@ final class AuthService: AuthServiceProtocol {
             }
             .decode(type: AuthResponse.self, decoder: JSONDecoder())
             .handleEvents(receiveOutput: { [weak self] response in
-                guard let self = self else { return }
-                self.saveToken(response.token)
+                guard let self = self, let token = response.token else { return }
+                self.saveToken(token)
                 self.fetchCurrentUser()
             }, receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
@@ -92,12 +93,40 @@ final class AuthService: AuthServiceProtocol {
             .decode(type: AuthResponse.self, decoder: JSONDecoder())
             .handleEvents(receiveOutput: { [weak self] response in
                 guard let self = self else { return }
-                self.saveToken(response.token)
-
-                self.fetchCurrentUser()
+                if let token = response.token {
+                    self.saveToken(token)
+                    self.fetchCurrentUser()
+                }
             }, receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
                     self?.clearToken()
+                    self?.loginStateSubject.send(.error(error.localizedDescription))
+                }
+            })
+            .eraseToAnyPublisher()
+    }
+    
+    func update(name: String, surname: String, email: String, password: String) -> AnyPublisher<ProfileUpdateResponse, Error> {
+        let request = AuthEndpoint.update(name: name, surname: surname, email: email, password: password).makeRequest
+        
+        loginStateSubject.send(.loading)
+        
+        return httpClient.publisher(request)
+            .tryMap { data, response in
+                guard 200..<300 ~= response.statusCode else {
+                    let errorMessage = "Profile update failed with code: \(response.statusCode)"
+                    self.clearToken()
+                    self.loginStateSubject.send(.error(errorMessage))
+                    throw NSError(domain: "AuthService", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: errorMessage])
+                }
+                return data
+            }
+            .decode(type: ProfileUpdateResponse.self, decoder: JSONDecoder())
+            .handleEvents(receiveOutput: { [weak self] response in
+                guard let self = self else { return }
+                self.fetchCurrentUser()
+            }, receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
                     self?.loginStateSubject.send(.error(error.localizedDescription))
                 }
             })
