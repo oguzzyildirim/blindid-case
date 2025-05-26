@@ -24,37 +24,35 @@ struct MoviePosterCard: View {
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             if imageLoaded {
-                WebImage(url: URL(string: movie.posterURL)) { image in
-                        image.resizable()
-                    } placeholder: {
-                        Rectangle()
-                            .foregroundColor(.gray.opacity(0.3))
-                            .frame(width: 140, height: 210)
-                            .cornerRadius(16)
-                    }
-                    .onSuccess { _, _, type in
-                        cacheType = type
-                        if type == .none {
-                            withAnimation(.easeIn(duration: 0.4)) {
+                if let posterURL = movie.posterURL {
+                    WebImage(url: URL(string: posterURL)) { image in
+                            image.resizable()
+                        } placeholder: {
+                            CustomPlaceHolder()
+                        }
+                        .onSuccess { _, _, type in
+                            cacheType = type
+                            if type == .none {
+                                withAnimation(.easeIn(duration: 0.4)) {
+                                    imageLoaded = true
+                                }
+                            } else {
                                 imageLoaded = true
                             }
-                        } else {
-                            imageLoaded = true
                         }
-                    }
-                    .indicator(.activity)
-                    .transition(.opacity)
-                    .scaledToFit()
-                    .frame(width: 140, height: 210)
-                    .cornerRadius(16)
+                        .indicator(.activity)
+                        .transition(.opacity)
+                        .scaledToFit()
+                        .frame(width: 140, height: 210)
+                        .cornerRadius(16)
+                } else {
+                    CustomPlaceHolder()
+                }
             } else {
-                Rectangle()
-                    .foregroundColor(.gray.opacity(0.3))
-                    .frame(width: 140, height: 210)
-                    .cornerRadius(16)
+                CustomPlaceHolder()
             }
 
-            Text("\(movie.id)")
+            Text("\(movie.id ?? 0)")
                 .font(.robotoMedium(size: 70))
                 .foregroundColor(.appMain)
                 .shadow(color: .blue.opacity(1), radius: 1, x: 1, y: 1)
@@ -66,7 +64,9 @@ struct MoviePosterCard: View {
             imageLoaded = true
         }
         .onTapGesture {
-            router.show(.movieDetail(movieId: movie.id), animated: true)
+            if let movieId = movie.id {
+                router.show(.movieDetail(movieId: movieId), animated: true)
+            }
         }
     }
 }

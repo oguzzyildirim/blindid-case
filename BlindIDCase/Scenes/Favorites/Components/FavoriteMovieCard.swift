@@ -18,36 +18,34 @@ struct FavoriteMovieCard: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             if imageLoaded {
-                WebImage(url: URL(string: movie.posterURL)) { image in
-                        image.resizable()
-                    } placeholder: {
-                        Rectangle()
-                            .foregroundColor(.gray.opacity(0.3))
-                            .frame(width: 140, height: 210)
-                            .cornerRadius(16)
-                    }
-                    .onSuccess { _, _, type in
-                        DispatchQueue.main.async {
-                            self.cacheType = type
-                            if type == .none {
-                                withAnimation(.easeIn(duration: 0.4)) {
+                if let posterURL = movie.posterURL {
+                    WebImage(url: URL(string: posterURL)) { image in
+                            image.resizable()
+                        } placeholder: {
+                            CustomPlaceHolder()
+                        }
+                        .onSuccess { _, _, type in
+                            DispatchQueue.main.async {
+                                self.cacheType = type
+                                if type == .none {
+                                    withAnimation(.easeIn(duration: 0.4)) {
+                                        self.imageLoaded = true
+                                    }
+                                } else {
                                     self.imageLoaded = true
                                 }
-                            } else {
-                                self.imageLoaded = true
                             }
                         }
-                    }
-                    .indicator(.activity)
-                    .transition(.opacity)
-                    .scaledToFit()
-                    .frame(width: 140, height: 210)
-                    .cornerRadius(16)
+                        .indicator(.activity)
+                        .transition(.opacity)
+                        .scaledToFit()
+                        .frame(width: 140, height: 210)
+                        .cornerRadius(16)
+                } else {
+                    CustomPlaceHolder()
+                }
             } else {
-                Rectangle()
-                    .foregroundColor(.gray.opacity(0.3))
-                    .frame(width: 140, height: 210)
-                    .cornerRadius(16)
+                CustomPlaceHolder()
             }
             
             Image(systemName: "heart.fill")
@@ -70,13 +68,13 @@ struct FavoriteMovieCard: View {
                     .frame(height: 80)
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(movie.title)
+                        Text(movie.title ?? "No Movie Title")
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.white)
                             .lineLimit(2)
                         
                         HStack {
-                            Text("\(movie.year)")
+                            Text(movie.year.map(String.init) ?? "Year not known")
                                 .font(.system(size: 10))
                                 .foregroundColor(.gray)
                             
@@ -87,7 +85,7 @@ struct FavoriteMovieCard: View {
                                     .foregroundColor(.yellow)
                                     .font(.system(size: 8))
                                 
-                                Text(String(format: "%.1f", movie.rating))
+                                Text(String(format: "%.1f", movie.rating ?? 0))
                                     .font(.system(size: 10, weight: .medium))
                                     .foregroundColor(.white)
                             }
@@ -102,7 +100,9 @@ struct FavoriteMovieCard: View {
             imageLoaded = true
         }
         .onTapGesture {
-            router.show(.movieDetail(movieId: movie.id), animated: true)
+            if let movieId = movie.id {
+                router.show(.movieDetail(movieId: movieId), animated: true)
+            }
         }
     }
 }

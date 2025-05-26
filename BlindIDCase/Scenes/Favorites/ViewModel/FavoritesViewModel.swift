@@ -67,28 +67,32 @@ final class FavoritesViewModel: ObservableObject {
             } receiveValue: { [weak self] user in
                 guard let self = self else { return }
                 
-                let movieIds = user.likedMovies
-                
-                if movieIds.isEmpty {
+                if let movieIds = user.likedMovies, !movieIds.isEmpty {
+                    
+                    self.movieService.fetchMovies()
+                        .receive(on: DispatchQueue.main)
+                        .sink { completion in
+                            self.isLoading = false
+                            
+                            if case .failure(let error) = completion {
+                                self.errorMessage = error.localizedDescription
+                            }
+                        } receiveValue: { movies in
+                            self.favoriteMovies = movies.filter { movie in
+                                if let movieId = movie.id {
+                                    return movieIds.contains(movieId)
+                                } else {
+                                    return false
+                                }    
+                            }
+                        }
+                        .store(in: &self.cancellables)
+                    
+                } else {
                     self.isLoading = false
                     self.favoriteMovies = []
                     return
                 }
-                
-                self.movieService.fetchMovies()
-                    .receive(on: DispatchQueue.main)
-                    .sink { completion in
-                        self.isLoading = false
-                        
-                        if case .failure(let error) = completion {
-                            self.errorMessage = error.localizedDescription
-                        }
-                    } receiveValue: { movies in
-                        self.favoriteMovies = movies.filter { movie in
-                            movieIds.contains(movie.id)
-                        }
-                    }
-                    .store(in: &self.cancellables)
             }
             .store(in: &cancellables)
     }
