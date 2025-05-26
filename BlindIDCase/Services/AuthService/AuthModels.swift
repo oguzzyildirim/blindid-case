@@ -10,27 +10,27 @@ import Foundation
 // MARK: - Response Models
 
 struct AuthResponse: Decodable {
-    let message: String
-    let token: String
-    let user: User
+    let message: String?
+    let token: String?
+    let user: User?
 }
 
 struct User: Decodable, Identifiable {
-    let id: String
-    let name: String
-    let surname: String
-    let email: String
+    let id: String?
+    let name: String?
+    let surname: String?
+    let email: String?
 }
 
 struct CurrentUser: Decodable, Identifiable {
-    let id: String
-    let name: String
-    let surname: String
-    let email: String
-    let likedMovies: [Int]
-    let createdAt: String
-    let updatedAt: String
-    let version: Int
+    let id: String?
+    let name: String?
+    let surname: String?
+    let email: String?
+    let likedMovies: [Int]?
+    let createdAt: String?
+    let updatedAt: String?
+    let version: Int?
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
@@ -53,4 +53,9 @@ struct CurrentUser: Decodable, Identifiable {
         self.updatedAt = ""
         self.version = 0
     }
+}
+
+struct ProfileUpdateResponse: Decodable {
+    let message: String?
+    let user: User?
 }
