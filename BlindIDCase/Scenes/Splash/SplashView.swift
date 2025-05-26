@@ -12,9 +12,13 @@ struct SplashView: View {
     
     var body: some View {
         ZStack {
-            Color.blue.ignoresSafeArea()
+            Color.appMain.ignoresSafeArea()
                 .onAppear(perform: viewModel.onAppear)
                 .onDisappear(perform: viewModel.onDisappear)
+            
+            Image("SplashImage")
+                .resizable()
+                .frame(width: 144, height: 144)
         }
         .ignoresSafeArea()
         .toolbar(.hidden)
