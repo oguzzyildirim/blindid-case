@@ -78,8 +78,7 @@ enum Strings {
         case profile
         case logout
         case settings
-        case accountSettings
-        case privacySettings
+        case updateProfile
         case error
         case tryAgain
         case loading
@@ -159,10 +158,8 @@ enum Strings {
                 return "Çıkış Yap"
             case .settings:
                 return "Ayarlar"
-            case .accountSettings:
-                return "Hesap Ayarları"
-            case .privacySettings:
-                return "Gizlilik Ayarları"
+            case .updateProfile:
+                return "Hesap Bilgilerini Güncelle"
             case .error:
                 return "Hata!"
             case .tryAgain:

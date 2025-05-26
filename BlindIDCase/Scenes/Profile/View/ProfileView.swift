@@ -20,6 +20,9 @@ struct ProfileView: View {
             switch viewModel.loginState {
             case .loggedIn:
                 loggedInView
+                    .onAppear {
+                        viewModel.getUserInfo()
+                    }
             case .loading:
                 loadingView
             case .error(let message):
@@ -95,30 +98,12 @@ struct ProfileView: View {
             
             VStack {
                 Button {
-                    
+                    router.show(.updateProfile(viewModel: viewModel), animated: true)
                 } label: {
                     HStack {
                         Image(systemName: "person.circle")
                             .foregroundColor(.blue)
-                        Text(LoginViewStrings.accountSettings.value)
-                            .foregroundColor(.white)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.gray)
-                    }
-                    .padding()
-                }
-                
-                Divider()
-                    .background(Color.gray.opacity(0.3))
-                
-                Button {
-                    
-                } label: {
-                    HStack {
-                        Image(systemName: "lock.shield")
-                            .foregroundColor(.blue)
-                        Text(LoginViewStrings.privacySettings.value)
+                        Text(LoginViewStrings.updateProfile.value)
                             .foregroundColor(.white)
                         Spacer()
                         Image(systemName: "chevron.right")
