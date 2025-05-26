@@ -70,7 +70,7 @@ final class MovieDetailViewModel: ObservableObject {
     }
     
     func toggleFavorite() {
-        guard let movie = movie else { return }
+        guard let movie = movie, let movieId = movie.id else { return }
         
         guard isLoggedIn else {
             showLoginAlert = true
@@ -78,7 +78,7 @@ final class MovieDetailViewModel: ObservableObject {
         }
         
         if isFavorite {
-            favoriteService.unlikeMovie(movieId: movie.id)
+            favoriteService.unlikeMovie(movieId: movieId)
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] completion in
                     if case .failure(let error) = completion {
@@ -89,7 +89,7 @@ final class MovieDetailViewModel: ObservableObject {
                 }
                 .store(in: &cancellables)
         } else {
-            favoriteService.likeMovie(movieId: movie.id)
+            favoriteService.likeMovie(movieId: movieId)
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] completion in
                     if case .failure(let error) = completion {
@@ -105,4 +105,4 @@ final class MovieDetailViewModel: ObservableObject {
     private func checkFavoriteStatus() {
         isFavorite = favoriteService.isMovieLiked(movieId: movieId)
     }
-} 
+}

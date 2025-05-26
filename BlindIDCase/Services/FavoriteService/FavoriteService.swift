@@ -82,7 +82,11 @@ final class FavoriteService: FavoriteServiceProtocol {
             return false
         }
         
-        return user.likedMovies.contains(movieId)
+        guard let likedMovies = user.likedMovies else {
+            return false
+        }
+        
+        return likedMovies.contains(movieId)
     }
     
     func getLikedMovies() -> [Int] {
@@ -90,6 +94,6 @@ final class FavoriteService: FavoriteServiceProtocol {
             return []
         }
         
-        return user.likedMovies
+        return user.likedMovies ?? []
     }
 }
