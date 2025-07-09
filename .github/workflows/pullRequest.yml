@@ -47,13 +47,13 @@ jobs:
       - name: Run Tests (No Cache)
         if: steps.cache.outputs.cache-hit != 'true'
         env:
-          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 30
-          FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 5
+          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 120
+          FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
         run: bundle exec fastlane unit_test
 
       - name: Run Tests (Cache)
         if: steps.cache.outputs.cache-hit == 'true'
         env:
-          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 30
-          FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 5
+          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 120
+          FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
         run: bundle exec fastlane unit_test skip_package_dependencies_resolution:true
