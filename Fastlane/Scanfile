@@ -4,7 +4,7 @@
 workspace "BlindIDCase.xcodeproj/project.xcworkspace"
 scheme "BlindIDCase"
 sdk "iphonesimulator"
-destination "platform=iOS Simulator"
+destination "platform=iOS Simulator,name=iPhone 15 Pro,OS=17.0.1"
 code_coverage true
 xcargs '-parallelizeTargets'
 prelaunch_simulator false
