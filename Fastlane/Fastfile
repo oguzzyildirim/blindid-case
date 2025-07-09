@@ -4,21 +4,6 @@ default_platform :ios
 platform :ios do
     desc 'Builds project and executes unit tests'
     lane :unit_test do |options|
-      # Set environment variables for xcodebuild timeout
-      ENV['FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT'] = '120'
-      ENV['FASTLANE_XCODEBUILD_SETTINGS_RETRIES'] = '10'
-      
-      scan(
-        workspace: "BlindIDCase.xcodeproj/project.xcworkspace",
-        scheme: "BlindIDCase",
-        device: "iPhone 14",
-        clean: options[:clean],
-        skip_package_dependencies_resolution: options[:skip_package_dependencies_resolution],
-        disable_concurrent_testing: true,
-        max_concurrent_simulators: 1,
-        derived_data_path: "Build/",
-        result_bundle: true,
-        fail_build: false
-      )
+      sh "FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT=120 FASTLANE_XCODEBUILD_SETTINGS_RETRIES=10 bundle exec fastlane scan workspace:BlindIDCase.xcodeproj/project.xcworkspace scheme:BlindIDCase device:'iPhone 14' clean:#{options[:clean]} skip_package_dependencies_resolution:#{options[:skip_package_dependencies_resolution]} disable_concurrent_testing:true max_concurrent_simulators:1 derived_data_path:Build/ result_bundle:true fail_build:false"
     end
 end
