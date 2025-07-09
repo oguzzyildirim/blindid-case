@@ -31,6 +31,9 @@ jobs:
       - name: Install gems
         run: bundle install
 
+      - name: Show available simulators
+        run: xcrun simctl list devices
+
       - name: Swift Packages Cache
         uses: actions/cache@v3
         id: cache
