@@ -1,11 +1,11 @@
 # For more information about this configuration visit
 # https://github.com/fastlane/scan#scanfile
 
-workspace "../BlindIDCase.xcodeproj/project.xcworkspace"
+workspace "BlindIDCase.xcodeproj/project.xcworkspace"
 scheme "BlindIDCase"
 sdk "iphonesimulator"
 destination "platform=iOS Simulator,name=iPhone 14"
 code_coverage true
 xcargs '-parallelizeTargets'
 prelaunch_simulator false
-derived_data_path "Build/"
+derived_data_path "./Build/"
