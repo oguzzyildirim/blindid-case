@@ -4,6 +4,7 @@
 workspace "BlindIDCase.xcodeproj/project.xcworkspace"
 scheme "BlindIDCase"
 sdk "iphonesimulator"
+destination "platform=iOS Simulator"
 code_coverage true
 xcargs '-parallelizeTargets'
 prelaunch_simulator false
