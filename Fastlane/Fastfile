@@ -6,7 +6,9 @@ platform :ios do
     lane :unit_test do |options|
       scan(
         clean: options[:clean],
-        skip_package_dependencies_resolution: options[:skip_package_dependencies_resolution]
+        skip_package_dependencies_resolution: options[:skip_package_dependencies_resolution],
+        xcodebuild_settings_timeout: 120,
+        xcodebuild_settings_retries: 10
       )
     end
 end
