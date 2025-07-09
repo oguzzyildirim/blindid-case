@@ -4,9 +4,6 @@ default_platform :ios
 platform :ios do
     desc 'Builds project and executes unit tests'
     lane :unit_test do |options|
-      ENV['FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT'] = '180'
-      ENV['FASTLANE_XCODEBUILD_SETTINGS_RETRIES'] = '15'
-      
       scan(
         clean: options[:clean],
         skip_package_dependencies_resolution: options[:skip_package_dependencies_resolution]
