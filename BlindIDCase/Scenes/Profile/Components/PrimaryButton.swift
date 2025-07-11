@@ -5,10 +5,10 @@ struct PrimaryButton: View {
     let action: () -> Void
     var isLoading: Bool = false
     var isDisabled: Bool = false
-    
+
     var body: some View {
         Button(action: {
-            if !isDisabled && !isLoading {
+            if !isDisabled, !isLoading {
                 action()
             }
         }) {
@@ -17,7 +17,7 @@ struct PrimaryButton: View {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(isDisabled ? Color.gray.opacity(0.5) : Color.blue)
                     .frame(height: 50)
-                
+
                 if isLoading {
                     // Loading indicator
                     ProgressView()
@@ -43,4 +43,4 @@ struct PrimaryButton: View {
     }
     .padding()
     .background(Color(.appMain))
-} 
+}

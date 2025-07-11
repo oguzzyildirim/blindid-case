@@ -14,23 +14,23 @@ enum LoginState {
     case loggedOut
     case loading
     case error(String)
-    
+
     var isLoggedIn: Bool {
         if case .loggedIn = self {
             return true
         }
         return false
     }
-    
+
     var user: CurrentUser? {
-        if case .loggedIn(let user) = self {
+        if case let .loggedIn(user) = self {
             return user
         }
         return nil
     }
-    
+
     var errorMessage: String? {
-        if case .error(let message) = self {
+        if case let .error(message) = self {
             return message
         }
         return nil

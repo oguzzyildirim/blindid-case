@@ -1,6 +1,10 @@
 fastlane_version '2.157'
 default_platform :ios
 
+# SwiftLint Configuration
+LINT_REPORT_OUTPUT = "fastlane/lintResults.html"
+SWIFTLINT_CONFIG = ".swiftlint.yml"
+
 platform :ios do
     desc 'Builds project and executes unit tests'
     lane :unit_test do |options|
@@ -8,5 +12,20 @@ platform :ios do
         clean: options[:clean],
         skip_package_dependencies_resolution: options[:skip_package_dependencies_resolution]
       )
+    end
+
+    desc 'Lints the codebase with SwiftLint'
+    def check_code_style
+        swiftlint(
+            mode: :lint,
+            strict: true,
+            reporter: "html",
+            output_file: LINT_REPORT_OUTPUT,
+            config_file: SWIFTLINT_CONFIG
+        )
+    end
+
+    lane :lint do |options|
+        check_code_style
     end
 end

@@ -1,5 +1,5 @@
 //
-//  LogHelper.swift
+//  LogManager.swift
 //  BlindIDCase
 //
 //  Created by Oguz Yildirim on 21.05.2025.
@@ -19,7 +19,7 @@ final class LogManager: NSObject {
     func infoWithSuccess(_ message: Any...) {
         log(type: "✅", message: message)
     }
-    
+
     func info(_ message: Any...) {
         log(type: "ℹ️", message: message)
     }

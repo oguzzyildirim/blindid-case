@@ -16,27 +16,27 @@ extension FavoriteEndpoint: ApiEndpoint {
     var baseURLString: String {
         return API.baseURL
     }
-    
+
     var apiVersion: String? {
         return nil
     }
-    
+
     var separatorPath: String? {
         return nil
     }
-    
+
     var path: String {
         switch self {
-        case .likeMovie(let movieId):
+        case let .likeMovie(movieId):
             return "api/movies/like/\(movieId)"
-        case .unlikeMovie(let movieId):
+        case let .unlikeMovie(movieId):
             return "api/movies/unlike/\(movieId)"
         }
     }
-    
+
     var headers: [String: String]? {
         var headers = ["Content-Type": "application/json"]
-        
+
         switch self {
         case .likeMovie, .unlikeMovie:
             if let token = UserDefaults.standard.string(forKey: "authToken") {
@@ -45,28 +45,28 @@ extension FavoriteEndpoint: ApiEndpoint {
                 LogManager.shared.error("AuthEndpoint: No token found for Authorization header")
             }
         }
-        
+
         return headers
     }
-    
+
     var queryItems: [URLQueryItem]? {
         return nil
     }
-    
+
     var params: [String: Any]? {
         switch self {
         case .likeMovie, .unlikeMovie:
             return nil
         }
     }
-    
+
     var method: APIHTTPMethod {
         switch self {
         case .likeMovie, .unlikeMovie:
             return .POST
         }
     }
-    
+
     var customDataBody: Data? {
         return nil
     }

@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-extension View {
+public extension View {
     // MARK: - Check Module Type
-    public func isVisible(_ bool: Bool) -> some View {
+
+    func isVisible(_ bool: Bool) -> some View {
         modifier(VisibilityModifier(isVisible: bool))
     }
 }

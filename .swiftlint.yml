@@ -1,0 +1,66 @@
+# SwiftLint Configuration
+
+# Paths to exclude from linting
+excluded:
+  - Build/
+  - DerivedData/
+  - Carthage/
+  - Pods/
+  - vendor/
+  - .build/
+  - .swiftpm/
+  - "*/SourcePackages/*"
+  - "**/.build"
+  - "**/Package.swift"
+
+# Paths to include (optional - if not specified, all Swift files are included)
+included:
+  - BlindIDCase/
+
+# Rules to enable/disable
+disabled_rules:
+  - trailing_whitespace
+  - todo
+  - multiple_closures_with_trailing_closure
+  - opening_brace
+  - trailing_comma
+
+opt_in_rules:
+  - empty_count
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+
+# Rule configurations
+line_length:
+  warning: 120
+  error: 200
+  ignores_function_declarations: true
+  ignores_comments: true
+  ignores_urls: true
+
+function_body_length:
+  warning: 50
+  error: 100
+
+type_body_length:
+  warning: 200
+  error: 350
+
+file_length:
+  warning: 500
+  error: 1000
+
+identifier_name:
+  min_length:
+    warning: 2
+    error: 1
+  max_length:
+    warning: 50
+    error: 60
+
+cyclomatic_complexity:
+  warning: 10
+  error: 20
+
+# Reporter type
+reporter: "xcode" 

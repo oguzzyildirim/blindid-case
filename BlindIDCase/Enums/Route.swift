@@ -15,14 +15,14 @@ enum Route {
     case register(viewModel: ProfileViewModel? = nil)
     case updateProfile(viewModel: ProfileViewModel? = nil)
     case profile
-    
+
     var rotingType: RoutingType {
         switch self {
         case .splash, .tabBar, .movieDetail, .login, .register, .updateProfile, .profile:
             return .push
         }
     }
-    
+
     @ViewBuilder func view() -> some View {
         switch self {
         case .splash:
@@ -32,10 +32,10 @@ enum Route {
         case .tabBar:
             let view = TabBarView()
             view
-        case .movieDetail(let movieId):
+        case let .movieDetail(movieId):
             let view = MovieDetailView(movieId: movieId)
             view
-        case .login(let viewModel):
+        case let .login(viewModel):
             if let viewModel = viewModel {
                 let view = LoginView()
                     .environmentObject(viewModel)
@@ -44,7 +44,7 @@ enum Route {
                 let view = LoginView()
                 view
             }
-        case .register(let viewModel):
+        case let .register(viewModel):
             if let viewModel = viewModel {
                 let view = RegisterView()
                     .environmentObject(viewModel)
@@ -53,7 +53,7 @@ enum Route {
                 let view = RegisterView()
                 view
             }
-        case .updateProfile(let viewModel):
+        case let .updateProfile(viewModel):
             if let viewModel = viewModel {
                 let view = ProfileUpdateView()
                     .environmentObject(viewModel)

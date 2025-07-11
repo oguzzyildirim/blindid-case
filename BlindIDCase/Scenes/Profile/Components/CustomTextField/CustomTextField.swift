@@ -16,21 +16,21 @@ struct CustomTextField: View {
     var isDisabled: Bool = false
     var isEmail: Bool = false
     var isName: Bool = false
-    
+
     @State private var errorText: String?
     @State private var isSecure: Bool = true
     @FocusState private var isFocused: Bool
     @State private var debounceTimer: Timer?
-    
+
     private let nameUpperCharacterLimit = 45
     private let emailUpperCharacterLimit = 128
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 90)
                     .fill(Color.gray)
-                
+
                 RoundedRectangle(cornerRadius: 90)
                     .stroke(
                         isFocused ? Color.brown :
@@ -38,7 +38,7 @@ struct CustomTextField: View {
                                 (isPassword && !isSecure ? Color.red : Color.blue)),
                         lineWidth: 1
                     )
-                
+
                 HStack {
                     if isPassword && isSecure {
                         SecureField("", text: $text)
@@ -64,11 +64,11 @@ struct CustomTextField: View {
                             }
                             .disabled(isDisabled)
                     }
-                    
+
                     showPasswordButton
                         .isVisible(isPassword)
                 }
-                
+
                 Text(isFocused || !text.isEmpty ? floatingText : placeholder)
                     .foregroundStyle(textColor())
                     .padding(.horizontal, 20)
@@ -83,7 +83,7 @@ struct CustomTextField: View {
             .padding(.horizontal, 10)
             .frame(height: 50)
             .opacity((isDisabled && !isPassword) ? 0.5 : 1)
-            
+
             errorTitle
                 .isVisible(errorText != nil)
         }
@@ -100,7 +100,7 @@ private extension CustomTextField {
                 .padding(.trailing)
         }
     }
-    
+
     var errorTitle: some View {
         Text(errorText ?? "")
             .foregroundColor(.red)
@@ -110,6 +110,7 @@ private extension CustomTextField {
 }
 
 // MARK: - Helper Functions
+
 private extension CustomTextField {
     func debounceTextChange(_ newValue: String) {
         debounceTimer?.invalidate()
@@ -123,7 +124,7 @@ private extension CustomTextField {
             }
         }
     }
-    
+
     func limitText() {
         if isEmail, text.count > emailUpperCharacterLimit {
             text = String(text.prefix(emailUpperCharacterLimit))
@@ -131,7 +132,7 @@ private extension CustomTextField {
             text = String(text.prefix(nameUpperCharacterLimit))
         }
     }
-    
+
     func validate(_ newText: String) {
         if isPassword {
             errorText = newText.isValidPassword() ? nil : LoginViewStrings.passwordRule.value
@@ -141,7 +142,7 @@ private extension CustomTextField {
             errorText = newText.isValidName() ? nil : LoginViewStrings.nameRule.value
         }
     }
-    
+
     func textColor() -> Color {
         if errorText != nil {
             return .red

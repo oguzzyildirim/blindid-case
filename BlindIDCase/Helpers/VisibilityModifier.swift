@@ -9,7 +9,7 @@ import SwiftUI
 
 struct VisibilityModifier: ViewModifier {
     let isVisible: Bool
-    
+
     func body(content: Content) -> some View {
         Group {
             if isVisible {

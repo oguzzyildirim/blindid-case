@@ -5,18 +5,18 @@
 //  Created by Oguz Yildirim on 21.05.2025.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @EnvironmentObject var router: RouterManager
-    
+
     var body: some View {
         ZStack {
             Color(.appMain)
                 .ignoresSafeArea()
-            
+
             switch viewModel.loginState {
             case .loggedIn:
                 loggedInView
@@ -25,7 +25,7 @@ struct ProfileView: View {
                     }
             case .loading:
                 loadingView
-            case .error(let message):
+            case let .error(message):
                 errorView(message: message)
             case .loggedOut:
                 LoginView()
@@ -33,7 +33,7 @@ struct ProfileView: View {
             }
         }
     }
-    
+
     private var loggedInView: some View {
         ScrollView {
             VStack(spacing: 24) {
@@ -55,29 +55,29 @@ struct ProfileView: View {
             }
         }
     }
-    
+
     private var loadingView: some View {
         ProgressView()
             .progressViewStyle(CircularProgressViewStyle(tint: .white))
             .scaleEffect(1.5)
     }
-    
+
     private func errorView(message: String) -> some View {
         VStack(spacing: 16) {
             Image(systemName: "exclamationmark.triangle")
                 .font(.system(size: 60))
                 .foregroundColor(.yellow)
-            
+
             Text(LoginViewStrings.error.value)
                 .font(.title)
                 .foregroundColor(.white)
-            
+
             Text(message)
                 .font(.body)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
-            
+
             Button(LoginViewStrings.tryAgain.value) {
                 viewModel.loginState = .loggedOut
             }
@@ -88,14 +88,14 @@ struct ProfileView: View {
         }
         .padding()
     }
-    
+
     private var settingsSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(LoginViewStrings.settings.value)
                 .font(.headline)
                 .foregroundColor(.white)
                 .padding(.top, 16)
-            
+
             VStack {
                 Button {
                     router.show(.updateProfile(viewModel: viewModel), animated: true)
@@ -111,10 +111,10 @@ struct ProfileView: View {
                     }
                     .padding()
                 }
-                
+
                 Divider()
                     .background(Color.gray.opacity(0.3))
-                
+
                 Button {
                     viewModel.logout()
                 } label: {

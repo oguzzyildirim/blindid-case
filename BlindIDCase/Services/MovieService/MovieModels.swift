@@ -16,11 +16,11 @@ struct Movie: Identifiable, Decodable {
     let category: String?
     let posterURL: String?
     let description: String?
-    
+
     enum CodingKeys: String, CodingKey {
         case id, title, year, rating, actors, category, description
         case posterURL = "poster_url"
     }
 }
 
-typealias MoviesResponse = [Movie] 
+typealias MoviesResponse = [Movie]

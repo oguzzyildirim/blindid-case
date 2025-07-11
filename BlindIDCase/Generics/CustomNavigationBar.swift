@@ -10,12 +10,12 @@ import SwiftUI
 struct BaseNavigationBar: View {
     @EnvironmentObject var router: RouterManager
     let navigationTitle: String
-    
+
     var body: some View {
         VStack {
             ZStack {
                 Color(.appMain)
-                
+
                 HStack {
                     Button(action: {
                         router.pop(animated: true)
@@ -25,20 +25,20 @@ struct BaseNavigationBar: View {
                             .font(.system(size: 20))
                             .frame(width: 44, height: 44)
                     }
-                    
+
                     Spacer()
-                    
+
                     Color.clear.frame(width: 44, height: 44)
                 }
                 .padding(.horizontal, 16)
-                
+
                 Text(navigationTitle)
                     .font(.headline)
                     .foregroundColor(.white)
                     .lineLimit(1)
             }
             .frame(height: 60)
-            
+
             Spacer()
         }
     }
@@ -47,12 +47,12 @@ struct BaseNavigationBar: View {
 struct MovieDetailNavigationBar: View {
     @EnvironmentObject var router: RouterManager
     @ObservedObject var viewModel: MovieDetailViewModel
-    
+
     var body: some View {
         VStack {
             ZStack {
                 Color(.appMain)
-                
+
                 HStack {
                     Button(action: {
                         router.pop(animated: true)
@@ -62,9 +62,9 @@ struct MovieDetailNavigationBar: View {
                             .font(.system(size: 20))
                             .frame(width: 44, height: 44)
                     }
-                    
+
                     Spacer()
-                    
+
                     Button(action: {
                         viewModel.toggleFavorite()
                     }) {
@@ -75,14 +75,14 @@ struct MovieDetailNavigationBar: View {
                     }
                 }
                 .padding(.horizontal, 16)
-                
+
                 Text(viewModel.movie?.safeTitle ?? "Movie Detail")
                     .font(.headline)
                     .foregroundColor(.white)
                     .lineLimit(1)
             }
             .frame(height: 60)
-            
+
             Spacer()
         }
     }

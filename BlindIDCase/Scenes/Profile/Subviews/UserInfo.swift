@@ -9,27 +9,27 @@ import SwiftUI
 
 struct UserInfo: View {
     let user: CurrentUser
-    
+
     // MARK: - Computed Properties for Safe Optional Handling
-    
+
     private var displayName: String {
         let firstName = user.name ?? "Bilinmeyen"
         let lastName = user.surname ?? "Kullanıcı"
         return "\(firstName) \(lastName)"
     }
-    
+
     private var displayEmail: String {
         user.email ?? "Email bulunamadı"
     }
-    
+
     private var favoriteCount: Int {
         user.likedMovies?.count ?? 0
     }
-    
+
     private var hasValidUserData: Bool {
         user.name != nil && user.surname != nil && user.email != nil
     }
-    
+
     var body: some View {
         VStack(spacing: 16) {
             Image(systemName: "person.circle.fill")
@@ -37,16 +37,16 @@ struct UserInfo: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 100, height: 100)
                 .foregroundColor(.blue)
-            
+
             Text("\(displayName)")
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
-            
+
             Text(displayEmail)
                 .font(.subheadline)
                 .foregroundColor(.gray)
-            
+
             HStack(spacing: 24) {
                 VStack {
                     Text("\(favoriteCount)")
@@ -56,11 +56,11 @@ struct UserInfo: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                 }
-                
+
                 Divider()
                     .frame(height: 40)
                     .background(Color.gray.opacity(0.5))
-                
+
                 VStack {
                     Text("0")
                         .font(.system(size: 20, weight: .bold))
@@ -69,11 +69,11 @@ struct UserInfo: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                 }
-                
+
                 Divider()
                     .frame(height: 40)
                     .background(Color.gray.opacity(0.5))
-                
+
                 VStack {
                     Text("0")
                         .font(.system(size: 20, weight: .bold))

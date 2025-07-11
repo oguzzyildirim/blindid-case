@@ -29,41 +29,41 @@ extension ApiEndpoint {
         guard let urlComponents = createURLComponents() else {
             fatalError("Could not create URL components from: \(baseURLString)")
         }
-        
+
         guard let url = urlComponents.url else {
             fatalError("Could not create URL from components: \(urlComponents)")
         }
-        
+
         var request = URLRequest(url: url)
         configureRequest(&request)
-        
+
         return request
     }
-    
+
     // MARK: - Private helpers
-    
+
     /// Creates URLComponents from the endpoint configuration
     /// - Returns: Configured URLComponents or nil if creation fails
     private func createURLComponents() -> URLComponents? {
         guard var components = URLComponents(string: baseURLString) else {
             return nil
         }
-        
+
         components.path = getFullPath()
         components.queryItems = queryItems
-        
+
         return components
     }
-    
+
     /// Configures the HTTP method, headers and body of the request
     /// - Parameter request: The URLRequest to configure
     private func configureRequest(_ request: inout URLRequest) {
         request.httpMethod = method.rawValue
         request.allHTTPHeaderFields = headers
-        
+
         setRequestBody(for: &request)
     }
-    
+
     /// Sets the HTTP body for the request based on the available parameters
     /// - Parameter request: The URLRequest to configure with a body
     private func setRequestBody(for request: inout URLRequest) {
@@ -73,7 +73,7 @@ extension ApiEndpoint {
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: params)
                 request.httpBody = jsonData
-                
+
                 if request.value(forHTTPHeaderField: "Content-Type") == nil {
                     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 }
@@ -82,16 +82,16 @@ extension ApiEndpoint {
             }
         }
     }
-    
+
     /// Constructs the full URL path by combining API version, separator path, and endpoint path
     /// - Returns: The complete path string starting with "/"
     private func getFullPath() -> String {
         var components: [String] = []
-        
+
         if let apiVersion = apiVersion { components.append(apiVersion) }
         if let separatorPath = separatorPath { components.append(separatorPath) }
         components.append(path)
-        
+
         return "/" + components.joined(separator: "/")
     }
 }
