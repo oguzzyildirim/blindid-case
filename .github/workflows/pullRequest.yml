@@ -10,7 +10,7 @@ jobs:
   lint:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.1
@@ -37,7 +37,7 @@ jobs:
         run: bundle exec fastlane lint
 
       - name: Upload lint results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: lint-results
