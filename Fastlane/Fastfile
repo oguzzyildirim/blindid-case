@@ -3,7 +3,6 @@ default_platform :ios
 
 # SwiftLint Configuration
 LINT_REPORT_OUTPUT = "fastlane/lintResults.html"
-SWIFTLINT_PATH = "/opt/homebrew/bin/swiftlint" # M1 Mac için, Intel Mac için "/usr/local/bin/swiftlint"
 SWIFTLINT_CONFIG = ".swiftlint.yml"
 
 platform :ios do
@@ -20,7 +19,6 @@ platform :ios do
         swiftlint(
             mode: :lint,
             strict: true,
-            executable: SWIFTLINT_PATH,
             reporter: "html",
             output_file: LINT_REPORT_OUTPUT,
             config_file: SWIFTLINT_CONFIG

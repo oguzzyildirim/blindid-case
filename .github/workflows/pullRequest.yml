@@ -20,6 +20,8 @@ jobs:
       - name: Install SwiftLint
         run: |
           brew install swiftlint
+          which swiftlint
+          swiftlint version
 
       - uses: ruby/setup-ruby@v1
         with:
