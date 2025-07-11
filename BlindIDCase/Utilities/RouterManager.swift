@@ -97,7 +97,8 @@ final class RouterManager: RouterProtocol {
     func popToFirstViewAfterRoot(animated: Bool) {
         DispatchQueue.main.async {
             if self.navigationController.viewControllers.count > 1 {
-                self.navigationController.popToViewController(self.navigationController.viewControllers[1], animated: animated)
+                self.navigationController.popToViewController(self.navigationController.viewControllers[1],
+                                                              animated: animated)
             }
         }
     }

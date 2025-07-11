@@ -58,8 +58,10 @@ final class FavoriteService: FavoriteServiceProtocol {
     func unlikeMovie(movieId: Int) -> AnyPublisher<Void, Error> {
         // Giriş yapılmış olması kontrol edilir
         guard authService.isUserLoggedIn() else {
-            return Fail(error: NSError(domain: "FavoriteService", code: 401,
-                                       userInfo: [NSLocalizedDescriptionKey: "User must be logged in to unlike a movie"]))
+            let desc = "User must be logged in to unlike a movie"
+            return Fail(error: NSError(domain: "FavoriteService",
+                                       code: 401,
+                                       userInfo: [NSLocalizedDescriptionKey: desc]))
                 .eraseToAnyPublisher()
         }
 

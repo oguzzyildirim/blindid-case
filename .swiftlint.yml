@@ -21,6 +21,9 @@ included:
 disabled_rules:
   - trailing_whitespace
   - todo
+  - multiple_closures_with_trailing_closure
+  - opening_brace
+  - trailing_comma
 
 opt_in_rules:
   - empty_count

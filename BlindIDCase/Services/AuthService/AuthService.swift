@@ -34,7 +34,7 @@ final class AuthService: AuthServiceProtocol {
 
     init(httpClient: HTTPClient = URLSession.shared) {
         self.httpClient = httpClient
-        if let _ = getToken() {
+        if let token = getToken() {
             loginStateSubject.send(.loading)
             fetchCurrentUser()
         }
@@ -57,7 +57,9 @@ final class AuthService: AuthServiceProtocol {
                     let errorMessage = "Registration failed with code: \(response.statusCode)"
                     self.clearToken()
                     self.loginStateSubject.send(.error(errorMessage))
-                    throw NSError(domain: "AuthService", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: errorMessage])
+                    throw NSError(domain: "AuthService",
+                                  code: response.statusCode,
+                                  userInfo: [NSLocalizedDescriptionKey: errorMessage])
                 }
                 return data
             }
@@ -86,7 +88,9 @@ final class AuthService: AuthServiceProtocol {
                     let errorMessage = "Login failed with code: \(response.statusCode)"
                     self.clearToken()
                     self.loginStateSubject.send(.error(errorMessage))
-                    throw NSError(domain: "AuthService", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: errorMessage])
+                    throw NSError(domain: "AuthService",
+                                  code: response.statusCode,
+                                  userInfo: [NSLocalizedDescriptionKey: errorMessage])
                 }
                 return data
             }
@@ -117,7 +121,9 @@ final class AuthService: AuthServiceProtocol {
                     let errorMessage = "Profile update failed with code: \(response.statusCode)"
                     self.clearToken()
                     self.loginStateSubject.send(.error(errorMessage))
-                    throw NSError(domain: "AuthService", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: errorMessage])
+                    throw NSError(domain: "AuthService",
+                                  code: response.statusCode,
+                                  userInfo: [NSLocalizedDescriptionKey: errorMessage])
                 }
                 return data
             }

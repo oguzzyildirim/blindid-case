@@ -26,7 +26,9 @@ final class MovieService: MovieServiceProtocol {
         return httpClient.publisher(request)
             .tryMap { data, response in
                 guard 200 ..< 300 ~= response.statusCode else {
-                    throw NSError(domain: "MovieService", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: "API Error: \(response.statusCode)"])
+                    throw NSError(domain: "MovieService",
+                                  code: response.statusCode,
+                                  userInfo: [NSLocalizedDescriptionKey: "API Error: \(response.statusCode)"])
                 }
                 return data
             }
@@ -40,7 +42,9 @@ final class MovieService: MovieServiceProtocol {
         return httpClient.publisher(request)
             .tryMap { data, response in
                 guard 200 ..< 300 ~= response.statusCode else {
-                    throw NSError(domain: "MovieService", code: response.statusCode, userInfo: [NSLocalizedDescriptionKey: "API Error: \(response.statusCode)"])
+                    throw NSError(domain: "MovieService",
+                                  code: response.statusCode,
+                                  userInfo: [NSLocalizedDescriptionKey: "API Error: \(response.statusCode)"])
                 }
                 return data
             }
