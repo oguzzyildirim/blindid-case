@@ -5,8 +5,8 @@
 //  Created by Oguz Yildirim on 22.05.2025.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol defining the requirements for an HTTP client
 ///
@@ -21,16 +21,16 @@ protocol HTTPClient {
 
 extension URLSession: HTTPClient {
     struct InvalidHTTPResponseError: Error {}
-    
+
     func publisher(_ request: URLRequest) -> AnyPublisher<(Data, HTTPURLResponse), Error> {
         return dataTaskPublisher(for: request)
-            .tryMap ({ result in
+            .tryMap { result in
                 guard let httpResponse = result.response as? HTTPURLResponse else {
                     throw InvalidHTTPResponseError()
                 }
                 LogManager.shared.infoWithSuccess("Response received in publisher func.")
                 return (result.data, httpResponse)
-            })
+            }
             .eraseToAnyPublisher()
     }
 }

@@ -9,32 +9,32 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
-    
+
     private let columns = [
         GridItem(.flexible()),
-        GridItem(.flexible())
+        GridItem(.flexible()),
     ]
-    
+
     private func getRank(for movie: Movie) -> Int? {
         guard viewModel.movies.prefix(5).contains(where: { $0.id == movie.id }) else {
             return nil
         }
         return viewModel.movies.firstIndex(where: { $0.id == movie.id })! + 1
     }
-    
+
     var body: some View {
         ZStack(alignment: .top) {
             Color.appMain
                 .ignoresSafeArea()
-            
+
             VStack(spacing: 0) {
                 homeNavigationBar
-                
+
                 contentView
             }
         }
     }
-    
+
     @ViewBuilder
     private var contentView: some View {
         if viewModel.isLoading {
@@ -49,12 +49,12 @@ struct HomeView: View {
                 Text("Oops!")
                     .font(.title)
                     .foregroundColor(.white)
-                
+
                 Text(errorMessage)
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .padding()
-                
+
                 Button("Try Again") {
                     viewModel.fetchMovies()
                 }
@@ -79,13 +79,13 @@ struct HomeView: View {
             }
         }
     }
-    
+
     private var homeNavigationBar: some View {
         VStack(spacing: 0) {
             Color.appMain
                 .frame(height: 0)
                 .ignoresSafeArea(edges: .top)
-            
+
             HStack {
                 Text("Movies App")
                     .font(.headline)

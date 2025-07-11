@@ -11,7 +11,7 @@ enum TabBarItems {
     case home
     case favorites
     case profile
-    
+
     var value: Int {
         switch self {
         case .home:
@@ -22,7 +22,7 @@ enum TabBarItems {
             return 2
         }
     }
-    
+
     var label: String {
         switch self {
         case .home:

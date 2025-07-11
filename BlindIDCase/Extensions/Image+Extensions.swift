@@ -5,7 +5,6 @@
 //  Created by Oguz Yildirim on 23.05.2025.
 //
 
-
 import SwiftUI
 
 extension Image {
@@ -25,4 +24,4 @@ extension Image {
             }
         )
     }
-} 
+}

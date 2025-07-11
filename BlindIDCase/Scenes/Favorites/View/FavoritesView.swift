@@ -10,20 +10,20 @@ import SwiftUI
 struct FavoritesView: View {
     @StateObject var viewModel = FavoritesViewModel()
     @EnvironmentObject var router: RouterManager
-    
+
     @AppStorage(StaticKeys.loginStatus.key) private var isLoggedIn: Bool = false
-    
+
     private let columns = [
         GridItem(.flexible()),
-        GridItem(.flexible())
+        GridItem(.flexible()),
     ]
-    
+
     var body: some View {
         NavigationView {
             ZStack {
                 Color.appMain
                     .ignoresSafeArea()
-                
+
                 if viewModel.isLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
@@ -33,16 +33,16 @@ struct FavoritesView: View {
                         Image(systemName: "person.crop.circle.badge.exclamationmark")
                             .font(.system(size: 70))
                             .foregroundColor(.gray)
-                        
+
                         Text(FavoritesTabStrings.loginRequired.value)
                             .font(.title)
                             .foregroundColor(.white)
-                        
+
                         Text(FavoritesTabStrings.loginRequiredDescription.value)
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
-                        
+
                         Button(action: {
                             UserDefaults.standard.set(TabBarItems.profile.value, forKey: StaticKeys.currentTab.key)
                         }) {
@@ -62,12 +62,12 @@ struct FavoritesView: View {
                         Text("Oops!")
                             .font(.title)
                             .foregroundColor(.white)
-                        
+
                         Text(errorMessage)
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
                             .padding()
-                        
+
                         Button(LoginViewStrings.tryAgain.value) {
                             viewModel.fetchFavoriteMovies()
                         }
@@ -82,16 +82,16 @@ struct FavoritesView: View {
                         Image(systemName: "heart.slash")
                             .font(.system(size: 70))
                             .foregroundColor(.gray)
-                        
+
                         Text(FavoritesTabStrings.noFavorites.value)
                             .font(.title)
                             .foregroundColor(.white)
-                        
+
                         Text(FavoritesTabStrings.noFavoritesDescription.value)
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
-                        
+
                         Button(action: {
                             // Set tab to home
                             UserDefaults.standard.set(TabBarItems.home.value, forKey: StaticKeys.currentTab.key)
@@ -139,5 +139,5 @@ struct FavoritesView: View {
 
 #Preview {
     FavoritesView()
-        .environmentObject(RouterManager.shared as! RouterManager)
+        .environmentObject(RouterManager.shared)
 }

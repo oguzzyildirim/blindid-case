@@ -20,7 +20,7 @@ enum Strings {
         case noFavorites
         case noFavoritesDescription
         case discoverMovie
-        
+
         var value: String {
             switch self {
             case .loginRequired:
@@ -38,6 +38,7 @@ enum Strings {
             }
         }
     }
+
     enum LoginStrings {
         case header
         case subText
@@ -46,11 +47,11 @@ enum Strings {
         case or
         case nonlogin
         case emptyRule
-        
+
         case email
         case emailHolder
         case emailRule
-        
+
         case password
         case passwordHolder
         case enterCurrentPassword
@@ -61,19 +62,19 @@ enum Strings {
         case activationButtonText
         case rememberMe
         case registerQuestion
-        
+
         case name
         case nameHolder
         case surname
         case surnameHolder
         case nameRule
-        
+
         case send
         case passwordRule
         case passwordRenewal
         case sentToEmail
         case sendAgain
-        
+
         // ProfileView
         case profile
         case logout
@@ -82,12 +83,12 @@ enum Strings {
         case error
         case tryAgain
         case loading
-        
+
         // UserInfo
         case favorites
         case reviews
         case following
-        
+
         var value: String {
             switch self {
             case .header:
@@ -150,7 +151,6 @@ enum Strings {
                 return "adresinize gönderilmiştir."
             case .sendAgain:
                 return "Tekrar Gönder"
-                
             // ProfileView
             case .profile:
                 return "Profil"
@@ -166,7 +166,6 @@ enum Strings {
                 return "Tekrar Dene"
             case .loading:
                 return "Yükleniyor..."
-                
             // UserInfo
             case .favorites:
                 return "Favoriler"

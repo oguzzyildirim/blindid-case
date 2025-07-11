@@ -5,22 +5,22 @@
 //  Created by Oguz Yildirim on 23.05.2025.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject private var viewModel: ProfileViewModel
     @EnvironmentObject var router: RouterManager
-    
+
     var body: some View {
         ZStack {
             Color(.appMain)
                 .ignoresSafeArea()
-            
+
             ScrollView {
                 VStack(spacing: 24) {
                     headerText
-                    
+
                     VStack(spacing: 16) {
                         CustomTextField(
                             text: $viewModel.email,
@@ -28,7 +28,7 @@ struct LoginView: View {
                             floatingText: LoginViewStrings.email.value,
                             isEmail: true
                         )
-                        
+
                         CustomTextField(
                             text: $viewModel.password,
                             placeholder: LoginViewStrings.passwordHolder.value,
@@ -36,14 +36,14 @@ struct LoginView: View {
                             isPassword: true
                         )
                     }
-                    
+
                     if let errorMessage = viewModel.errorMessage {
                         Text(errorMessage)
                             .foregroundColor(.red)
                             .font(.system(size: 14))
                             .padding(.top, 8)
                     }
-                    
+
                     Button(action: viewModel.login) {
                         Text(LoginViewStrings.login.value)
                             .font(.headline)
@@ -55,13 +55,13 @@ struct LoginView: View {
                     }
                     .disabled(!viewModel.isLoginFormValid || viewModel.isLoading)
                     .padding(.top, 8)
-                    
+
                     if viewModel.isLoading {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                             .padding(.top, 16)
                     }
-                    
+
                     registerPrompt
                 }
                 .padding(.horizontal, 24)
@@ -77,13 +77,14 @@ struct LoginView: View {
 }
 
 // MARK: - Private UI Components
+
 private extension LoginView {
     var headerText: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(LoginViewStrings.header.value)
                 .font(.system(size: 28, weight: .bold))
                 .foregroundColor(.white)
-            
+
             Text(LoginViewStrings.subText.value)
                 .font(.system(size: 16))
                 .foregroundColor(.gray)
@@ -91,13 +92,13 @@ private extension LoginView {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.bottom, 16)
     }
-    
+
     var registerPrompt: some View {
         HStack(spacing: 4) {
             Text(LoginViewStrings.registerQuestion.value)
                 .foregroundColor(.gray)
                 .font(.system(size: 14))
-            
+
             Button {
                 router.show(.register(viewModel: viewModel), animated: true)
             } label: {
@@ -113,4 +114,4 @@ private extension LoginView {
 #Preview {
     LoginView()
         .environmentObject(ProfileViewModel())
-} 
+}

@@ -5,8 +5,8 @@
 //  Created by Oguz Yildirim on 23.05.2025.
 //
 
-import Foundation
 import Combine
+import Foundation
 import SwiftUI
 
 final class MovieDetailViewModel: ObservableObject {
@@ -15,30 +15,31 @@ final class MovieDetailViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isFavorite = false
     @Published var showLoginAlert = false
-    
+
     @AppStorage(StaticKeys.loginStatus.key) var isLoggedIn: Bool = false
-    
+
     private let movieId: Int
     private let movieService: MovieServiceProtocol
     private let favoriteService: FavoriteServiceProtocol
     private let authService: AuthServiceProtocol
     private var cancellables = Set<AnyCancellable>()
-    
-    init(movieId: Int, 
+
+    init(movieId: Int,
          movieService: MovieServiceProtocol = MovieService(),
          favoriteService: FavoriteServiceProtocol = FavoriteService(),
-         authService: AuthServiceProtocol = AuthService()) {
+         authService: AuthServiceProtocol = AuthService())
+    {
         self.movieId = movieId
         self.movieService = movieService
         self.favoriteService = favoriteService
         self.authService = authService
-        
+
         setupLoginStateObserver()
-        
+
         checkFavoriteStatus()
         fetchMovieDetail()
     }
-    
+
     private func setupLoginStateObserver() {
         authService.getCurrentLoginState()
             .receive(on: DispatchQueue.main)
@@ -49,17 +50,17 @@ final class MovieDetailViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
+
     func fetchMovieDetail() {
         isLoading = true
         errorMessage = nil
-        
+
         movieService.fetchMovieDetail(id: movieId)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 self?.isLoading = false
-                
-                if case .failure(let error) = completion {
+
+                if case let .failure(error) = completion {
                     self?.errorMessage = error.localizedDescription
                 }
             } receiveValue: { [weak self] movie in
@@ -68,20 +69,20 @@ final class MovieDetailViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
+
     func toggleFavorite() {
         guard let movie = movie, let movieId = movie.id else { return }
-        
+
         guard isLoggedIn else {
             showLoginAlert = true
             return
         }
-        
+
         if isFavorite {
             favoriteService.unlikeMovie(movieId: movieId)
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] completion in
-                    if case .failure(let error) = completion {
+                    if case let .failure(error) = completion {
                         print("Error unliking movie: \(error.localizedDescription)")
                     }
                 } receiveValue: { [weak self] _ in
@@ -92,7 +93,7 @@ final class MovieDetailViewModel: ObservableObject {
             favoriteService.likeMovie(movieId: movieId)
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] completion in
-                    if case .failure(let error) = completion {
+                    if case let .failure(error) = completion {
                         print("Error liking movie: \(error.localizedDescription)")
                     }
                 } receiveValue: { [weak self] _ in
@@ -101,7 +102,7 @@ final class MovieDetailViewModel: ObservableObject {
                 .store(in: &cancellables)
         }
     }
-    
+
     private func checkFavoriteStatus() {
         isFavorite = favoriteService.isMovieLiked(movieId: movieId)
     }

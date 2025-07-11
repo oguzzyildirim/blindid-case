@@ -31,7 +31,7 @@ struct CurrentUser: Decodable, Identifiable {
     let createdAt: String?
     let updatedAt: String?
     let version: Int?
-    
+
     enum CodingKeys: String, CodingKey {
         case id = "_id"
         case name
@@ -44,14 +44,14 @@ struct CurrentUser: Decodable, Identifiable {
     }
 
     init(from user: User) {
-        self.id = user.id
-        self.name = user.name
-        self.surname = user.surname
-        self.email = user.email
-        self.likedMovies = []
-        self.createdAt = ""
-        self.updatedAt = ""
-        self.version = 0
+        id = user.id
+        name = user.name
+        surname = user.surname
+        email = user.email
+        likedMovies = []
+        createdAt = ""
+        updatedAt = ""
+        version = 0
     }
 }
 

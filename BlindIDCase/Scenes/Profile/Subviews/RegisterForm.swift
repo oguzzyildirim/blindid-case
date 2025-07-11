@@ -12,7 +12,7 @@ struct RegisterForm: View {
     @Binding var lastName: String
     @Binding var email: String
     @Binding var password: String
-    
+
     var body: some View {
         VStack(spacing: 16) {
             CustomTextField(
@@ -21,21 +21,21 @@ struct RegisterForm: View {
                 floatingText: LoginViewStrings.name.value,
                 isName: true
             )
-            
+
             CustomTextField(
                 text: $lastName,
                 placeholder: LoginViewStrings.surnameHolder.value,
                 floatingText: LoginViewStrings.surname.value,
                 isName: true
             )
-            
+
             CustomTextField(
                 text: $email,
                 placeholder: LoginViewStrings.emailHolder.value,
                 floatingText: LoginViewStrings.email.value,
                 isEmail: true
             )
-            
+
             CustomTextField(
                 text: $password,
                 placeholder: LoginViewStrings.passwordHolder.value,
@@ -45,4 +45,3 @@ struct RegisterForm: View {
         }
     }
 }
-

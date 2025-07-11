@@ -18,15 +18,15 @@ extension AuthEndpoint: ApiEndpoint {
     var baseURLString: String {
         return API.baseURL
     }
-    
+
     var apiVersion: String? {
         return nil
     }
-    
+
     var separatorPath: String? {
         return nil
     }
-    
+
     var path: String {
         switch self {
         case .register:
@@ -39,10 +39,10 @@ extension AuthEndpoint: ApiEndpoint {
             return "api/auth/me"
         }
     }
-    
+
     var headers: [String: String]? {
         var headers = ["Content-Type": "application/json"]
-        
+
         switch self {
         case .me, .update:
             if let token = UserDefaults.standard.string(forKey: "authToken") {
@@ -54,49 +54,49 @@ extension AuthEndpoint: ApiEndpoint {
         default:
             break
         }
-        
+
         return headers
     }
-    
+
     var queryItems: [URLQueryItem]? {
         return nil
     }
-    
+
     var params: [String: Any]? {
         switch self {
-        case .register(let name, let surname, let email, let password):
+        case let .register(name, surname, email, password):
             let params = [
                 "name": name,
                 "surname": surname,
                 "email": email,
-                "password": password
+                "password": password,
             ]
             LogManager.shared.info("AuthEndpoint: Update params: \(name), \(surname), \(email), [password]")
             return params
-            
-        case .update(let name, let surname, let email, let password):
+
+        case let .update(name, surname, email, password):
             let params = [
                 "name": name,
                 "surname": surname,
                 "email": email,
-                "password": password
+                "password": password,
             ]
             LogManager.shared.info("AuthEndpoint: Register params: \(name), \(surname), \(email), [password]")
             return params
-            
-        case .login(let email, let password):
+
+        case let .login(email, password):
             let params = [
                 "email": email,
-                "password": password
+                "password": password,
             ]
             LogManager.shared.info("AuthEndpoint: Login params: \(email), [password]")
             return params
-            
+
         case .me:
             return nil
         }
     }
-    
+
     var method: APIHTTPMethod {
         switch self {
         case .register, .login:
@@ -107,7 +107,7 @@ extension AuthEndpoint: ApiEndpoint {
             return .GET
         }
     }
-    
+
     var customDataBody: Data? {
         return nil
     }

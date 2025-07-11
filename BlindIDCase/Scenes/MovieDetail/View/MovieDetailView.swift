@@ -5,8 +5,8 @@
 //  Created by Oguz Yildirim on 23.05.2025.
 //
 
-import SwiftUI
 import SDWebImageSwiftUI
+import SwiftUI
 
 struct MovieDetailView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -14,10 +14,10 @@ struct MovieDetailView: View {
     @ObservedObject var viewModel: MovieDetailViewModel
     @State private var selectedTab: DetailTab = .about
     @AppStorage(StaticKeys.currentTab.key) private var currentTab: Int = TabBarItems.home.value
-    
+
     enum DetailTab: CaseIterable {
         case about, cast
-        
+
         var title: String {
             switch self {
             case .about: return "About Movie"
@@ -25,16 +25,16 @@ struct MovieDetailView: View {
             }
         }
     }
-    
+
     init(movieId: Int) {
-        self.viewModel = MovieDetailViewModel(movieId: movieId)
+        viewModel = MovieDetailViewModel(movieId: movieId)
     }
-    
+
     var body: some View {
         ZStack(alignment: .top) {
             Color(.appMain)
                 .ignoresSafeArea()
-            
+
             Group {
                 if viewModel.isLoading {
                     loadingView
@@ -47,7 +47,7 @@ struct MovieDetailView: View {
                 }
             }
             MovieDetailNavigationBar(viewModel: viewModel)
-            .environmentObject(router)
+                .environmentObject(router)
         }
         .navigationBarHidden(true)
         .alert(isPresented: $viewModel.showLoginAlert) {
@@ -59,28 +59,27 @@ struct MovieDetailView: View {
 // MARK: - Private Views
 
 private extension MovieDetailView {
-    
     var loadingView: some View {
         ProgressView()
             .progressViewStyle(CircularProgressViewStyle(tint: .white))
             .scaleEffect(1.5)
     }
-    
+
     func errorView(message: String) -> some View {
         VStack(spacing: 16) {
             Image(systemName: "exclamationmark.triangle")
                 .font(.system(size: 50))
                 .foregroundColor(.orange)
-            
+
             Text("Oops!")
                 .font(.title)
                 .foregroundColor(.white)
-            
+
             Text(message)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
-            
+
             Button("Try Again") {
                 viewModel.fetchMovieDetail()
             }
@@ -93,20 +92,20 @@ private extension MovieDetailView {
         .padding(.top, 60)
         .padding()
     }
-    
+
     var emptyStateView: some View {
         VStack(spacing: 16) {
             Image(systemName: "film")
                 .font(.system(size: 50))
                 .foregroundColor(.gray)
-            
+
             Text("No movie details available")
                 .foregroundColor(.white)
                 .font(.headline)
         }
         .padding(.top, 60)
     }
-    
+
     func movieContentView(movie: Movie) -> some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -117,7 +116,7 @@ private extension MovieDetailView {
             }
         }
     }
-    
+
     func posterImageSection(movie: Movie) -> some View {
         ZStack(alignment: .bottomTrailing) {
             AsyncImageView(
@@ -125,13 +124,13 @@ private extension MovieDetailView {
                 width: UIScreen.main.bounds.width,
                 height: 250
             )
-            
+
             if movie.hasValidRating {
                 ratingBadge(rating: movie.safeRating)
             }
         }
     }
-    
+
     func thumbnailSection(movie: Movie) -> some View {
         HStack(alignment: .top) {
             AsyncImageView(
@@ -142,7 +141,7 @@ private extension MovieDetailView {
             )
             .padding(.leading)
             .offset(y: -30)
-            
+
             VStack(alignment: .leading) {
                 Text(movie.safeTitle)
                     .font(.system(size: 18, weight: .semibold))
@@ -152,27 +151,27 @@ private extension MovieDetailView {
                     .fixedSize(horizontal: false, vertical: true)
             }
             .padding(.leading, 8)
-            
+
             Spacer()
         }
     }
-    
+
     func movieInfoBar(movie: Movie) -> some View {
         HStack(spacing: 12) {
             InfoItem(
                 icon: "calendar",
                 text: movie.safeYearString
             )
-            
+
             InfoDivider()
-            
+
             InfoItem(
                 icon: "clock",
                 text: "-"
             )
-            
+
             InfoDivider()
-            
+
             InfoItem(
                 icon: "ticket",
                 text: movie.safeCategory
@@ -181,14 +180,14 @@ private extension MovieDetailView {
         .padding(.horizontal)
         .padding(.top, 8)
     }
-    
+
     func tabsSection(movie: Movie) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             tabHeaders
             tabContent(movie: movie)
         }
     }
-    
+
     var tabHeaders: some View {
         HStack(spacing: 24) {
             ForEach(DetailTab.allCases, id: \.self) { tab in
@@ -206,7 +205,7 @@ private extension MovieDetailView {
         .padding(.horizontal)
         .padding(.top, 16)
     }
-    
+
     func tabContent(movie: Movie) -> some View {
         Group {
             switch selectedTab {
@@ -217,7 +216,7 @@ private extension MovieDetailView {
             }
         }
     }
-    
+
     func aboutContent(movie: Movie) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(movie.safeDescription)
@@ -228,7 +227,7 @@ private extension MovieDetailView {
         }
         .padding()
     }
-    
+
     func castContent(movie: Movie) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             if movie.hasActors {
@@ -243,7 +242,7 @@ private extension MovieDetailView {
         }
         .padding()
     }
-    
+
     var loginAlert: Alert {
         Alert(
             title: Text("Login Required"),
@@ -255,7 +254,7 @@ private extension MovieDetailView {
             secondaryButton: .cancel()
         )
     }
-    
+
     func ratingBadge(rating: Double) -> some View {
         HStack(spacing: 4) {
             Image(systemName: "star.fill")
@@ -279,14 +278,14 @@ private struct AsyncImageView: View {
     let width: CGFloat
     let height: CGFloat
     let cornerRadius: CGFloat
-    
+
     init(url: URL?, width: CGFloat, height: CGFloat, cornerRadius: CGFloat = 0) {
         self.url = url
         self.width = width
         self.height = height
         self.cornerRadius = cornerRadius
     }
-    
+
     var body: some View {
         Group {
             if let url = url {
@@ -309,12 +308,12 @@ private struct PlaceholderImageView: View {
     var body: some View {
         ZStack {
             Color.gray.opacity(0.3)
-            
+
             VStack(spacing: 8) {
                 Image(systemName: "photo")
                     .font(.system(size: 30))
                     .foregroundColor(.gray)
-                
+
                 Text("No Image")
                     .font(.caption)
                     .foregroundColor(.gray)
@@ -326,7 +325,7 @@ private struct PlaceholderImageView: View {
 private struct InfoItem: View {
     let icon: String
     let text: String
-    
+
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: icon)
@@ -350,13 +349,13 @@ private struct TabHeaderView: View {
     let title: String
     let isSelected: Bool
     let action: () -> Void
-    
+
     var body: some View {
         VStack(spacing: 4) {
             Text(title)
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(.white)
-            
+
             Rectangle()
                 .frame(height: 4)
                 .foregroundColor(isSelected ? Color.blue : Color.clear)
@@ -367,14 +366,14 @@ private struct TabHeaderView: View {
 
 private struct ActorRow: View {
     let name: String
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "person.circle.fill")
                 .resizable()
                 .frame(width: 40, height: 40)
                 .foregroundColor(.gray)
-            
+
             Text(name)
                 .font(.system(size: 16))
                 .foregroundColor(.white)
@@ -388,7 +387,7 @@ private struct EmptyActorsView: View {
             Image(systemName: "person.2.slash")
                 .font(.system(size: 40))
                 .foregroundColor(.gray)
-            
+
             Text("No cast information available")
                 .font(.subheadline)
                 .foregroundColor(.gray)
@@ -402,63 +401,64 @@ private struct EmptyActorsView: View {
 
 extension Movie {
     var safeTitle: String {
-        title?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false 
+        title?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
             ? title! : "Unknown Title"
     }
-    
+
     var safeDescription: String {
-        description?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false 
+        description?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
             ? description! : "No description available for this movie."
     }
-    
+
     var safeCategory: String {
-        category?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false 
+        category?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
             ? category! : "Unknown"
     }
-    
+
     var safeYearString: String {
         guard let year = year, year > 0 else { return "Unknown" }
         return "\(year)"
     }
-    
+
     var safeRating: Double {
         rating ?? 0.0
     }
-    
+
     var hasValidRating: Bool {
         guard let rating = rating else { return false }
         return rating > 0.0 && rating <= 10.0
     }
-    
+
     var safePosterURL: URL? {
         guard let posterURL = posterURL,
-              !posterURL.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+              !posterURL.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        else {
             return nil
         }
         return URL(string: posterURL)
     }
-    
+
     var safeActors: [String] {
         actors?.compactMap { actor in
             let trimmed = actor.trimmingCharacters(in: .whitespacesAndNewlines)
             return trimmed.isEmpty ? nil : trimmed
         } ?? []
     }
-    
+
     var hasActors: Bool {
         !safeActors.isEmpty
     }
-    
+
     var estimatedDuration: String {
         guard let id = id, id > 0 else { return "Unknown" }
         let duration = id * 8 // Using id*8 as mentioned in original code
         return "\(duration) Minutes"
     }
-    
+
     var safeId: Int {
         id ?? 0
     }
-    
+
     var hasValidId: Bool {
         guard let id = id else { return false }
         return id > 0
@@ -469,5 +469,5 @@ extension Movie {
 
 #Preview {
     MovieDetailView(movieId: 17)
-        .environmentObject(RouterManager.shared as! RouterManager)
+        .environmentObject(RouterManager.shared)
 }

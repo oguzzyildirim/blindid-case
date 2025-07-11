@@ -7,21 +7,20 @@
 
 import UIKit
 
-let appDelegate = UIApplication.shared.delegate as! AppDelegate
+let appDelegate = UIApplication.shared.delegate as! AppDelegate // swiftlint:disable:this force_cast
 
 @main
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-    
     var window: UIWindow?
     var eczaneWindow: UIWindow!
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        
+    func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         // MARK: Setup UIWindow
+
         setupWindow()
         return true
     }
-    
+
     private func setupWindow() {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = RouterManager.shared.navigationController
@@ -29,4 +28,3 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         RouterManager.shared.start()
     }
 }
-

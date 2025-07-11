@@ -10,12 +10,12 @@ import UIKit
 
 final class BlindIDCaseNavigationController: UINavigationController {
     private var duringPushAnimation = false
-    
+
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-         delegate = self
+        delegate = self
     }
-    
+
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         delegate = self
@@ -25,17 +25,17 @@ final class BlindIDCaseNavigationController: UINavigationController {
         super.init(coder: aDecoder)
         delegate = self
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         interactivePopGestureRecognizer?.delegate = self
     }
-    
+
     deinit {
         delegate = nil
         interactivePopGestureRecognizer?.delegate = nil
     }
-    
+
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         duringPushAnimation = true
         super.pushViewController(viewController, animated: animated)
@@ -43,14 +43,16 @@ final class BlindIDCaseNavigationController: UINavigationController {
 }
 
 // MARK: - UINavigationControllerDelegate
+
 extension BlindIDCaseNavigationController: UINavigationControllerDelegate {
-    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+    func navigationController(_ navigationController: UINavigationController, didShow _: UIViewController, animated _: Bool) {
         guard let swipeNavigationController = navigationController as? BlindIDCaseNavigationController else { return }
         swipeNavigationController.duringPushAnimation = false
     }
 }
 
 // MARK: - UIGestureRecognizerDelegate
+
 extension BlindIDCaseNavigationController: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard gestureRecognizer == interactivePopGestureRecognizer else {

@@ -32,33 +32,33 @@ enum APIErrorHandler: Error {
     /// - Returns: String description of the error
     var errorDescription: String? {
         switch self {
-        case .customApiError(let apiErrorDTO):
+        case let .customApiError(apiErrorDTO):
             var errorItems: String?
             if let errorItemsDTO = apiErrorDTO.errorItems {
                 errorItems = ""
-                errorItemsDTO.forEach {
-                    errorItems?.append($0.key)
+                for item in errorItemsDTO {
+                    errorItems?.append(item.key)
                     errorItems?.append(" ")
-                    errorItems?.append($0.value)
+                    errorItems?.append(item.value)
                     errorItems?.append("\n")
                 }
             }
             if errorItems == nil && apiErrorDTO.code == nil &&
-                apiErrorDTO.message == nil {
+                apiErrorDTO.message == nil
+            {
                 errorItems = "Internal error!"
             }
             return String(format: "%@ %@ \n %@", apiErrorDTO.code ?? "",
                           apiErrorDTO.message ?? "", errorItems ?? "")
-            
         case .requestFailed:
             return "request failed"
-        case .normalError(let error):
+        case let .normalError(error):
             return error.localizedDescription
         case .tokenExpired:
             return "Token problems"
-        case .decodingError(let error):
+        case let .decodingError(error):
             return "Decoding error: \(error.localizedDescription)"
-        case .emptyErrorWithStatusCode(let status):
+        case let .emptyErrorWithStatusCode(status):
             return status
         }
     }
