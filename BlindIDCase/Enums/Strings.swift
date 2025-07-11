@@ -144,7 +144,7 @@ enum Strings {
             case .send:
                 return "Gönder"
             case .passwordRule:
-                return "Şifreniz en az 8 karakter olmalıdır. Bir büyük harf, bir küçük harf, bir sayı ve bir özel karakter içermelidir" // swiftlint:disable:this line_length comment_spacing
+                return "Şifreniz en az 8 karakter olmalıdır. Bir büyük harf, bir küçük harf, bir sayı ve bir özel karakter içermelidir" // swiftlint:disable:this line_length
             case .passwordRenewal:
                 return "Şifre yenileme e-postası"
             case .sentToEmail:

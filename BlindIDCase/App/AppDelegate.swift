@@ -12,7 +12,7 @@ let appDelegate = UIApplication.shared.delegate as! AppDelegate // swiftlint:dis
 @main
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     var window: UIWindow?
-    var eczaneWindow: UIWindow!
+    var eczaneWindow: UIWindow?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         // MARK: Setup UIWindow
