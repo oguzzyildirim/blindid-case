@@ -401,18 +401,24 @@ private struct EmptyActorsView: View {
 
 extension Movie {
     var safeTitle: String {
-        title?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
-            ? title! : "Unknown Title"
+        if let trimmed = title?.trimmingCharacters(in: .whitespacesAndNewlines), !trimmed.isEmpty {
+            return trimmed
+        }
+        return "Unknown Title"
     }
 
     var safeDescription: String {
-        description?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
-            ? description! : "No description available for this movie."
+        if let trimmed = description?.trimmingCharacters(in: .whitespacesAndNewlines), !trimmed.isEmpty {
+            return trimmed
+        }
+        return "No description available for this movie."
     }
 
     var safeCategory: String {
-        category?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
-            ? category! : "Unknown"
+        if let trimmed = category?.trimmingCharacters(in: .whitespacesAndNewlines), !trimmed.isEmpty {
+            return trimmed
+        }
+        return "Unknown"
     }
 
     var safeYearString: String {

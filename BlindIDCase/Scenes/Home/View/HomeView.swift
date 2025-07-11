@@ -19,7 +19,12 @@ struct HomeView: View {
         guard viewModel.movies.prefix(5).contains(where: { $0.id == movie.id }) else {
             return nil
         }
-        return viewModel.movies.firstIndex(where: { $0.id == movie.id })! + 1
+
+        if let index = viewModel.movies.firstIndex(where: { $0.id == movie.id }) {
+            return index + 1
+        }
+
+        return nil
     }
 
     var body: some View {
